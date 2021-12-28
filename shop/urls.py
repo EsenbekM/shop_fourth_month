@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from main import views as product_views
 from users import views as user_views
+import users
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,6 +25,8 @@ urlpatterns = [
     path('api/v1/data/', product_views.index),
     path('api/v1/products/', product_views.product_list_view),
     path('api/v1/products/<int:id>/', product_views.product_detail_view),
-    path('api/v1/registration/', user_views.registration),
-    path('api/v1/sign_in/', user_views.sign_in),
+    path('api/v1/registration/', user_views.RegistrationAPIView.as_view()),
+    path('api/v1/sign_in/', user_views.LoginAPIView.as_view()),
+    path('api/v1/categories/', product_views.CategoryListAPIView.as_view()),
+    path('api/v1/categories/<int:id>/', product_views.CategoryDetailAPIView.as_view())
 ]

@@ -1,10 +1,14 @@
 from django.http import HttpRequest
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from .serializers import ProductSerializer, ProductCreateValidateSerializer
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from .serializers import ProductSerializer, ProductCreateValidateSerializer, CategorySerializer
 from .models import Product, Category
+
+
 
 @api_view(['GET'])
 def index(request):
@@ -16,6 +20,17 @@ def index(request):
         'text': "hello"
     }
     return Response(data)
+
+class CategoryListAPIView(ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [AllowAny]
+    pagination_class = PageNumberPagination
+
+class CategoryDetailAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    lookup_field = 'id'
 
 @api_view(['GET', 'POST'])
 # @permission_classes([IsAuthenticated])
